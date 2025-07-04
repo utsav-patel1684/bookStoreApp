@@ -1,12 +1,12 @@
 import React from 'react'
-
+import list from "../list.json"
 function Cards( {item}) {
- 
+  console.log(item)
   return (
     
       <>
       <div className='mt-4 my-3 '>
-        <div className="card bg-base-100 w- shadow-xl hover:scale-105 duration-300">
+        <div className="card bg-base-100 w-50 shadow-xl hover:scale-105 duration-300">
   <figure>
     <img
       src={item.image}

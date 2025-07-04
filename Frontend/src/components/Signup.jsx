@@ -1,20 +1,43 @@
 import React from "react";
 import Login from "./Login";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useLocation, useNavigate } from "react-router-dom";
+
 function Signup() {
+  const location= useLocation()
+  const navigate =useNavigate()
+  const from= location.state?.from?.pathname || "/"
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
+  const onSubmit = async (data) => {
+   const userInfo = {
+    fullname: data.fullname,
+    email: data.email,
+    password: data.password,
   };
+   await axios.post("http://localhost:4001/user/signup", userInfo)
+  .then((res) =>{
+    if(res.data) {
+      toast.success("Signup successfully");
+      navigate(from ,{ replace : true});
+    }
+    localStorage.setItem("users", JSON.stringify(res.data.user));
+  }).catch((err) => {
+    if(err.response) {
+      toast.error(err.response.data.message);
+     
+    }
+  } )
+}
   return (
     <>
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex h-screen items-center justify-center ">
         <div className=" border-[2px] border-pink-300 shadow-md p-5 rounded-md">
           <div className="">
             <form onSubmit={handleSubmit(onSubmit)} method="dialog">
@@ -32,10 +55,10 @@ function Signup() {
                   type="text"
                   placeholder="Enter your Fullname"
                   className=" mt-2 w-80 px-3 py-1 border rounded-md outline-pink-300"
-                  {...register("name", { required: true })}
+                  {...register("fullname", { required: true })}
                 />
                 <br />
-                 {errors.name && (
+                 {errors.fullname && (
                 <span className="text-red-500 text-sm">This field is required</span>
               )}
               </div>

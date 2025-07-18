@@ -1,4 +1,4 @@
-import React from "react";
+
 import banner from "../../public/banner.jpg"
 function Banner() {
   return (
